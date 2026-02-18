@@ -356,7 +356,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionHeader(title: 'More', icon: Icons.more_horiz_rounded),
+          //const _SectionHeader(title: 'More', icon: Icons.more_horiz_rounded),
           const SizedBox(height: 10),
           _MenuTile(
             icon: Icons.feedback_rounded,
