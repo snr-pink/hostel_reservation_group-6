@@ -16,9 +16,12 @@ import 'package:flutter/foundation.dart'
 /// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
-    if (kIsWeb) {
-      return web;
-    }
+    // if (kIsWeb) {
+    //   throw UnsupportedError(
+    //     'DefaultFirebaseOptions have not been configured for web - '
+    //     'you can reconfigure this by running the FlutterFire CLI again.',
+    //   );
+    // }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
@@ -72,5 +75,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'hostelreservation-1defd.firebasestorage.app',
     measurementId: 'G-FFZ39D66LM',
   );
-
 }
