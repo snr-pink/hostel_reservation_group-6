@@ -11,6 +11,8 @@ import 'screens/room_selection_screen.dart';
 import 'screens/admin/manage_rooms_screen.dart';
 import 'screens/admin/add_edit_room_screen.dart';
 import 'screens/user_profile.dart';
+import 'screen/receipt_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +63,7 @@ final _router = GoRouter(
         final data = state.extra as Map<String, dynamic>?;
         return AddEditRoomScreen(roomId: id, initialData: data);
       },
+    )
     //user profile route
     GoRoute(
       path: '/profile',
