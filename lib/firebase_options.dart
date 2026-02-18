@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -65,4 +62,15 @@ class DefaultFirebaseOptions {
     storageBucket: 'hostelreservation-1defd.firebasestorage.app',
     iosBundleId: 'com.example.hostelReservation',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBjZLoYh6TMI52qkqX9S_xHyECHmBYB4K8',
+    appId: '1:1053110957892:web:0a0bd68bb196f1fb99c911',
+    messagingSenderId: '1053110957892',
+    projectId: 'hostelreservation-1defd',
+    authDomain: 'hostelreservation-1defd.firebaseapp.com',
+    storageBucket: 'hostelreservation-1defd.firebasestorage.app',
+    measurementId: 'G-FFZ39D66LM',
+  );
+
 }
