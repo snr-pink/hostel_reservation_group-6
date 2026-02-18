@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hostel_reservation/splash_screen.dart';
+import 'package:pdf/widgets.dart';
 import 'data_seeder.dart';
 import 'firebase_options.dart';
 import 'screens/home_screen.dart';
@@ -11,8 +12,7 @@ import 'screens/room_selection_screen.dart';
 import 'screens/admin/manage_rooms_screen.dart';
 import 'screens/admin/add_edit_room_screen.dart';
 import 'screens/user_profile.dart';
-import 'screen/receipt_screen.dart';
-
+import 'screens/receipt_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,11 +63,16 @@ final _router = GoRouter(
         final data = state.extra as Map<String, dynamic>?;
         return AddEditRoomScreen(roomId: id, initialData: data);
       },
-    )
+    ),
     //user profile route
     GoRoute(
       path: '/profile',
       builder: (context, state) => const UserProfileScreen(),
+    ),
+
+    GoRoute(
+      path: '/receipt',
+      builder: (context, state) => const ReceiptScreen(),
     ),
   ],
 );
@@ -77,19 +82,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Hostel Reservation',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-        ),
-        useMaterial3: true,
-      ),
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routerConfig: _router,
+      home: const ReceiptScreen(),
     );
   }
 }
