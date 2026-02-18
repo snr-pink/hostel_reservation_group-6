@@ -7,6 +7,7 @@ import 'screens/home_screen.dart';
 import 'screens/hostel_list_screen.dart';
 import 'screens/hostel_detail_screen.dart';
 import 'screens/room_selection_screen.dart';
+import 'screens/user_profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,11 @@ final _router = GoRouter(
         final id = state.pathParameters['id']!;
         return RoomSelectionScreen(hostelId: id);
       },
+    ),
+    //user profile route
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const UserProfileScreen(),
     ),
   ],
 );
