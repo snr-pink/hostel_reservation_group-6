@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hostel_reservation/registration_screen.dart';
+import 'package:hostel_reservation/sign_in_screen.dart';
 import 'package:hostel_reservation/splash_screen.dart';
 import 'data_seeder.dart';
 import 'firebase_options.dart';
@@ -26,6 +28,10 @@ final _router = GoRouter(
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     
+    // Auth routes
+    GoRoute(path: '/signin', builder: (context, state) => const SignInScreen()),
+    GoRoute(path: '/register', builder: (context, state) => const RegistrationScreen()),
+
     GoRoute(
       path: '/hostels',
       builder: (context, state) => const HostelListScreen(),

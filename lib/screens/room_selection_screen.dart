@@ -21,11 +21,27 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
   Map<String, dynamic>? _selectedRoomData;
   Map<String, dynamic>? _selectedRoomTypeData;
   
-  // Get current user
-  User? get _currentUser => FirebaseAuth.instance.currentUser;
+  // Use FirebaseAuth instance
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    print('🔐 [RoomSelection] Screen initialized');
+    // Listen to auth changes
+    _auth.authStateChanges().listen((User? user) {
+      if (mounted) {
+        print('🔐 [RoomSelection] Auth state changed: ${user != null ? 'Logged in' : 'Logged out'}');
+        setState(() {});
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    // Get current user
+    final User? currentUser = _auth.currentUser;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -35,6 +51,26 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          if (currentUser != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Row(
+                children: [
+                  const Icon(Icons.person, size: 20, color: Colors.green),
+                  const SizedBox(width: 4),
+                  Text(
+                    currentUser.email?.split('@')[0] ?? 'User',
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,6 +108,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                       setState(() {
                         _selectedRoomTypeId = types.first.id;
                         _selectedRoomTypeData = types.first.data() as Map<String, dynamic>;
+                        print('🏷️ [RoomSelection] Auto-selected room type: ${_selectedRoomTypeData!['name']}');
                       });
                     }
                   });
@@ -105,6 +142,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                       _selectedRoomTypeData = selectedDoc.data() as Map<String, dynamic>;
                       _selectedRoomId = null;
                       _selectedRoomData = null;
+                      print('🏷️ [RoomSelection] Changed room type to: ${_selectedRoomTypeData!['name']}');
                     });
                   },
                 );
@@ -196,6 +234,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                                         ...data,
                                         'id': room.id,
                                       };
+                                      print('🏠 [RoomSelection] Selected room: $roomName (ID: ${room.id})');
                                     });
                                   }
                                 : null,
@@ -319,31 +358,64 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                 ],
               ),
               child: SafeArea(
-                child: ElevatedButton(
-                  onPressed: _currentUser != null 
-                      ? () => _initiatePayment(
-                          _selectedRoomData!,
-                          _selectedRoomId!,
-                          _selectedRoomTypeData!['price'] ?? 1000,
-                        )
-                      : () => _showLoginRequiredDialog(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: Column(
+                  children: [
+                    // Show user info if logged in
+                    if (currentUser != null) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.green.shade200),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Booking as: ${currentUser.email}',
+                                style: const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    
+                    ElevatedButton(
+                      onPressed: currentUser != null 
+                          ? () => _initiatePayment(
+                              _selectedRoomData!,
+                              _selectedRoomId!,
+                              _selectedRoomTypeData!['price'] ?? 1000,
+                            )
+                          : () => _showLoginRequiredDialog(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: currentUser != null ? Colors.green : Colors.orange,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        currentUser != null
+                            ? 'Book Now - ₦${_selectedRoomTypeData!['price'] ?? 1000}'
+                            : 'Login to Book',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    _currentUser != null
-                        ? 'Book Now - ₦${_selectedRoomTypeData!['price'] ?? 1000}'
-                        : 'Login to Book',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -353,6 +425,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
   }
 
   void _showLoginRequiredDialog() {
+    print('🔐 [RoomSelection] Showing login required dialog');
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -365,6 +438,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
           ),
           ElevatedButton(
             onPressed: () {
+              print('🔐 [RoomSelection] Navigating to sign in screen');
               Navigator.pop(context);
               context.go('/signin');
             },
@@ -380,13 +454,25 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
     String roomId,
     int price,
   ) async {
-    final user = _currentUser;
-    if (user == null) return;
+    final user = _auth.currentUser;
+    if (user == null) {
+      print('❌ [RoomSelection] No user logged in, cannot initiate payment');
+      return;
+    }
+
+    print('💰 [RoomSelection] ========== INITIATING PAYMENT ==========');
+    print('📧 User Email: ${user.email}');
+    print('🆔 User ID: ${user.uid}');
+    print('💰 Price: ₦$price');
+    print('🏠 Room: ${roomData['name']} (ID: $roomId)');
+    print('🏨 Hostel ID: ${widget.hostelId}');
 
     // Generate unique reference with user ID
     final reference = '${user.uid}_${paystackService.generateReference()}';
+    print('🔖 Generated Reference: $reference');
 
     // Navigate to Paystack WebView with user email
+    print('🔄 Navigating to Paystack WebView...');
     final paymentSuccessful = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
@@ -402,6 +488,9 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
         ),
       ),
     );
+
+    print('✅ [RoomSelection] Payment result: $paymentSuccessful');
+    print('==========================================');
 
     // If payment successful, clear selection and show success
     if (paymentSuccessful == true && mounted) {

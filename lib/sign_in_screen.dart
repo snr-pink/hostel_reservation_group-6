@@ -11,7 +11,7 @@ import 'registration_screen.dart';
 
 /// Primary login interface for the hostel reservation system.
 // [LABEL: SIGN IN SCREEN] - Handles user authentication.
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatefulWidget{
   const SignInScreen({super.key});
 
   @override
