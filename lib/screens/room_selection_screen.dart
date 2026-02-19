@@ -213,8 +213,9 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                         padding: const EdgeInsets.all(16),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 1.5,
+                              crossAxisCount: 2, // 2 columns
+                              childAspectRatio:
+                                  0.8, // Adjusted height for button
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
                             ),
@@ -314,6 +315,40 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
+                                        if (isAvailable) ...[
+                                          const SizedBox(height: 8),
+                                          SizedBox(
+                                            height: 32,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                _initiatePayment(data, room.id);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: isSelected
+                                                    ? Colors.white
+                                                    : Colors.green,
+                                                foregroundColor: isSelected
+                                                    ? Colors.green
+                                                    : Colors.white,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                'Book Room',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ],
                                     ),
                                   ),
