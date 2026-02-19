@@ -16,12 +16,12 @@ class RoomSelectionScreen extends StatefulWidget {
 }
 
 class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
-  Map<String, dynamic>? _selectedRoomData; // Added
+  //Map<String, dynamic>? _selectedRoomData; // Added
   String? _selectedRoomTypeId;
   String? _selectedRoomId;
   Map<String, dynamic>? _selectedRoomData;
   Map<String, dynamic>? _selectedRoomTypeData;
-  
+
   // Use FirebaseAuth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -32,7 +32,9 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
     // Listen to auth changes
     _auth.authStateChanges().listen((User? user) {
       if (mounted) {
-        print('🔐 [RoomSelection] Auth state changed: ${user != null ? 'Logged in' : 'Logged out'}');
+        print(
+          '🔐 [RoomSelection] Auth state changed: ${user != null ? 'Logged in' : 'Logged out'}',
+        );
         setState(() {});
       }
     });
@@ -42,7 +44,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
   Widget build(BuildContext context) {
     // Get current user
     final User? currentUser = _auth.currentUser;
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -108,8 +110,11 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                     if (mounted) {
                       setState(() {
                         _selectedRoomTypeId = types.first.id;
-                        _selectedRoomTypeData = types.first.data() as Map<String, dynamic>;
-                        print('🏷️ [RoomSelection] Auto-selected room type: ${_selectedRoomTypeData!['name']}');
+                        _selectedRoomTypeData =
+                            types.first.data() as Map<String, dynamic>;
+                        print(
+                          '🏷️ [RoomSelection] Auto-selected room type: ${_selectedRoomTypeData!['name']}',
+                        );
                       });
                     }
                   });
@@ -137,13 +142,18 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                     );
                   }).toList(),
                   onChanged: (value) {
-                    final selectedDoc = types.firstWhere((doc) => doc.id == value);
+                    final selectedDoc = types.firstWhere(
+                      (doc) => doc.id == value,
+                    );
                     setState(() {
                       _selectedRoomTypeId = value;
-                      _selectedRoomTypeData = selectedDoc.data() as Map<String, dynamic>;
+                      _selectedRoomTypeData =
+                          selectedDoc.data() as Map<String, dynamic>;
                       _selectedRoomId = null;
                       _selectedRoomData = null;
-                      print('🏷️ [RoomSelection] Changed room type to: ${_selectedRoomTypeData!['name']}');
+                      print(
+                        '🏷️ [RoomSelection] Changed room type to: ${_selectedRoomTypeData!['name']}',
+                      );
                     });
                   },
                 );
@@ -235,7 +245,9 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                                         ...data,
                                         'id': room.id,
                                       };
-                                      print('🏠 [RoomSelection] Selected room: $roomName (ID: ${room.id})');
+                                      print(
+                                        '🏠 [RoomSelection] Selected room: $roomName (ID: ${room.id})',
+                                      );
                                     });
                                   }
                                 : null,
@@ -343,9 +355,11 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                     },
                   ),
           ),
-          
+
           // Book Now Button (appears when room is selected)
-          if (_selectedRoomId != null && _selectedRoomData != null && _selectedRoomTypeData != null)
+          if (_selectedRoomId != null &&
+              _selectedRoomData != null &&
+              _selectedRoomTypeData != null)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -389,17 +403,17 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                     //   ),
                     //   const SizedBox(height: 12),
                     // ],
-                    
                     ElevatedButton(
-                      onPressed: currentUser != null 
+                      onPressed: currentUser != null
                           ? () => _initiatePayment(
                               _selectedRoomData!,
                               _selectedRoomId!,
-                              _selectedRoomTypeData!['price'] ?? 1000,
                             )
                           : () => _showLoginRequiredDialog(),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: currentUser != null ? Colors.green : Colors.orange,
+                        backgroundColor: currentUser != null
+                            ? Colors.green
+                            : Colors.orange,
                         foregroundColor: Colors.white,
                         minimumSize: const Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(
@@ -454,6 +468,8 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
     Map<String, dynamic> roomData,
     String roomId,
   ) async {
+    final user = _auth.currentUser;
+    if (user == null) return; // guard
     print(roomData);
     // Get room price
     int price = roomData['price'] is int
@@ -496,7 +512,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Room booked successfully! 🎉'),
+          content: Text('Room booked successfully! '),
           backgroundColor: Colors.green,
           duration: Duration(seconds: 3),
         ),
