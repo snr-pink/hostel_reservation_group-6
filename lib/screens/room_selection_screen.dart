@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import '../services/paystack_webview_service.dart';
 import './paystack_webview_screen.dart';
+import 'package:hostel_reservation/widgets/app_footer.dart';
 
 class RoomSelectionScreen extends StatefulWidget {
   final String hostelId;
@@ -47,6 +48,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: const AppFooter(),
       appBar: AppBar(
         title: const Text('Select Room', style: TextStyle(color: Colors.black)),
         centerTitle: true,
