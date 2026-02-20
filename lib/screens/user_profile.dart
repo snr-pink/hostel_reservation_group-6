@@ -5,6 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:hostel_reservation/app_theme.dart';
 import 'package:hostel_reservation/widgets/app_footer.dart';
 
+import 'package:hostel_reservation/features/cancel/cancel_button.dart';
+
+// ─── Derived palette from AppTheme ───────────────────────────────────────────
+// Primary  : AppTheme.primaryColor  = Color(0xFF008000)  – FUTO Green
+// Light    : _kGreenLight           = Color(0xFF4CAF50)  – lighter accent
+// Pale bg  : _kGreenPale            = Color(0xFFE8F5E9)  – tinted background
+// Dark bg  : AppTheme.backgroundDark                     – deep header gradient start
+// Surface  : AppTheme.surfaceLight  = Colors.white
+// BG       : AppTheme.backgroundLight                    – scaffold bg
 const _kGreenLight = Color(0xFF4CAF50);
 const _kGreenPale = Color(0xFFE8F5E9);
 const _kGreyText = Color(0xFF757575);
@@ -325,7 +334,12 @@ class _UserProfileScreenState extends State<UserProfileScreen>
               }
               return Column(
                 children: docs.map((doc) {
-                  final data = doc.data() as Map<String, dynamic>;
+                final data = doc.data() as Map<String, dynamic>;
+                
+                final bookingId = doc.id;
+                final paymentReference = data['paymentReference'] ?? '';
+                final status = data['status'] ?? 'confirmed';
+                final isCancelled = status == 'cancelled';
                   return _TransactionTile(data: data);
                 }).toList(),
               );
