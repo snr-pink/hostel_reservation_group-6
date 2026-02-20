@@ -99,8 +99,9 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) return const SizedBox();
-                if (!snapshot.hasData)
+                if (!snapshot.hasData) {
                   return const Center(child: LinearProgressIndicator());
+                }
 
                 final types = snapshot.data!.docs;
                 if (types.isEmpty) return const SizedBox();
@@ -122,7 +123,7 @@ class _RoomSelectionScreenState extends State<RoomSelectionScreen> {
                 }
 
                 return DropdownButtonFormField<String>(
-                  value: _selectedRoomTypeId,
+                  initialValue: _selectedRoomTypeId,
                   decoration: InputDecoration(
                     labelText: 'Select Room Type',
                     border: OutlineInputBorder(

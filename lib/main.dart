@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+<<<<<<< HEAD
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:hostel_reservation/data_seeder.dart';
 import 'firebase_options.dart';
 import 'providers/router_provider.dart';
+=======
+import 'package:go_router/go_router.dart';
+import 'package:hostel_reservation/sign_in_screen.dart';
+import 'package:hostel_reservation/splash_screen.dart';
+//import 'data_seeder.dart';
+import 'firebase_options.dart';
+import 'screens/home_screen.dart';
+import 'screens/hostel_list_screen.dart';
+import 'screens/hostel_detail_screen.dart';
+import 'screens/room_selection_screen.dart';
+import 'screens/complaint_page.dart';
+import 'screens/review_page.dart';
+import 'screens/feedback_screen.dart';
+import 'screens/admin/manage_rooms_screen.dart';
+import 'screens/admin/add_edit_room_screen.dart';
+import 'screens/user_profile.dart';
+>>>>>>> bdae6b02dd6309e7e9c701b7e5a9c3caa2787216
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
